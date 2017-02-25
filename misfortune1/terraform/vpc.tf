@@ -8,6 +8,10 @@ resource "aws_vpc" "wom1" {
 
 resource "aws_internet_gateway" "wom1" {
     vpc_id = "${aws_vpc.wom1.id}"
+
+    tags {
+        Name = "wom1-aws-igw"
+    }
 }
 
 /*
@@ -33,7 +37,7 @@ resource "aws_route_table" "wom1-public" {
     }
 
     tags {
-        Name = "Public Subnet"
+        Name = "Public Route Table"
     }
 }
 
@@ -45,13 +49,25 @@ resource "aws_route_table_association" "wom1-public" {
 /*
   Private Subnet
 */
-resource "aws_subnet" "wom1-private" {
+resource "aws_subnet" "wom1-1-private" {
     vpc_id = "${aws_vpc.wom1.id}"
 
-    cidr_block = "${var.private_subnet_cidr}"
+    cidr_block = "${var.private_subnet_cidr1}"
     availability_zone = "us-east-1a"
 
     tags {
         Name = "Private Subnet"
     }
 }
+
+resource "aws_subnet" "wom1-2-private" {
+    vpc_id = "${aws_vpc.wom1.id}"
+
+    cidr_block = "${var.private_subnet_cidr2}"
+    availability_zone = "us-east-1b"
+
+    tags {
+        Name = "Private Subnet"
+    }
+}
+

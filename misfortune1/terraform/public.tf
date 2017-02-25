@@ -13,6 +13,13 @@ resource "aws_security_group" "wom1-web" {
     }
 
     ingress {
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
         from_port = 443
         to_port = 443
         protocol = "tcp"
@@ -30,13 +37,16 @@ resource "aws_security_group" "wom1-web" {
         from_port = 5432
         to_port = 5432
         protocol = "tcp"
-        cidr_blocks = ["${var.private_subnet_cidr}"]
+        cidr_blocks = [
+            "${var.private_subnet_cidr1}",
+            "${var.private_subnet_cidr2}",
+        ]
     }
 
     vpc_id = "${aws_vpc.wom1.id}"
 
     tags {
-        Name = "WOM1-WebSG"
+        Name = "wom1-webSG"
     }
 }
 
