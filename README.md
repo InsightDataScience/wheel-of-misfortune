@@ -19,5 +19,5 @@
 
   * `terraform plan` - shows what will be created (dry-run)
   * `terraform apply` - brings up infra
-  * `terraform apply -destroy` - shows what will be taken down (dry-run)
+  * `terraform plan -destroy` - shows what will be taken down (dry-run)
   * `terraform destroy` - takes down infra
