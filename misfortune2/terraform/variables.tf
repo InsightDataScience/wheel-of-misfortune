@@ -17,28 +17,26 @@ variable "amis" {
     }
 }
 
-variable "vpc_cidr_1" {
+variable "amis-api" {
+    description = "AMIs by region for API"
+    default = {
+        us-east-1 = "ami-475b8751"
+    }
+}
+
+variable "vpc_cidr" {
     description = "CIDR for the whole VPC"
     default = "10.0.0.0/16"
 }
 
-variable "vpc_cidr_2" {
-    description = "CIDR for the whole VPC"
-    default = "10.1.0.0/16"
-}
-
-variable "public_subnet_cidr_vpc1_1" {
+variable "public_subnet_cidr" {
     description = "CIDR for the Public Subnet"
     default = "10.0.0.0/24"
 }
 
-variable "public_subnet_cidr_vpc2_1" {
-    description = "CIDR for the Public Subnet 1"
-    default = "10.1.0.0/24"
+variable "private_subnet_cidr" {
+    description = "CIDR for the Private Subnet"
+    default = "10.0.1.0/24"
 }
 
-variable "public_subnet_cidr_vpc2_2" {
-    description = "CIDR for the Public Subnet 2"
-    default = "10.1.1.0/24"
-}
 

@@ -2,7 +2,7 @@
   Web Servers
 */
 resource "aws_security_group" "wom1-web" {
-    name = "vpc_web"
+    name = "wom1-web"
     description = "Allow incoming HTTP connections."
 
     ingress {
@@ -33,20 +33,17 @@ resource "aws_security_group" "wom1-web" {
         cidr_blocks = ["0.0.0.0/0"]
     }
 
-    egress { # Postgres Server
-        from_port = 5432
-        to_port = 5432
-        protocol = "tcp"
-        cidr_blocks = [
-            "${var.private_subnet_cidr1}",
-            "${var.private_subnet_cidr2}",
-        ]
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = -1
+        cidr_blocks = ["0.0.0.0/0"]
     }
 
-    vpc_id = "${aws_vpc.wom1.id}"
+    vpc_id = "${aws_vpc.wom1-1.id}"
 
     tags {
-        Name = "wom1-webSG"
+        Name = "wom1-web"
     }
 }
 
@@ -56,7 +53,7 @@ resource "aws_instance" "wom1-web" {
     instance_type = "t2.micro"
     key_name = "${var.aws_key_name}"
     vpc_security_group_ids = ["${aws_security_group.wom1-web.id}"]
-    subnet_id = "${aws_subnet.wom1-public.id}"
+    subnet_id = "${aws_subnet.wom1-vpc1-1.id}"
     associate_public_ip_address = true
     source_dest_check = false
 

@@ -1,29 +1,29 @@
 /*
-  Web Servers
+  RDS Server
 */
 resource "aws_security_group" "wom1-rds" {
-    name = "vpc_rds"
+    name = "wom-rds"
     description = "Allow incoming RDS connections."
 
     ingress {
         from_port = 5432
         to_port = 5432
         protocol = "tcp"
-        cidr_blocks = ["${var.public_subnet_cidr}"]
+        cidr_blocks = ["0.0.0.0/0"]
     }
 
-    vpc_id = "${aws_vpc.wom1.id}"
+    vpc_id = "${aws_vpc.wom1-2.id}"
 
     tags {
-        Name = "wom1-rdsSG"
+        Name = "wom1-rds-sg"
     }
 }
 
 resource "aws_db_subnet_group" "wom1-rds" {
     name = "wom1-rds"
     subnet_ids = [
-        "${aws_subnet.wom1-1-private.id}",
-        "${aws_subnet.wom1-2-private.id}"
+        "${aws_subnet.wom1-vpc2-1.id}",
+        "${aws_subnet.wom1-vpc2-2.id}"
     ]
 
     tags {
