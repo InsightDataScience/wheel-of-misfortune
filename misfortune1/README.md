@@ -1,17 +1,24 @@
-# Trying to reach a resource with a Public DNS but in the private subnet
+# Reach a resource with different protocols from multiple clients. Modify the AWS infrastructure to pass all the goals.
 
 ## Contents
 
 * VPC
 * Public subnet
-* Private subnet
-* EC2 instance in public subnet
-* RDS postgres server in private subnet
+* 4 EC2 instances acting as clients
+* 1 EC2 isntance acting as a server
+  * Nginx web server on HTTP port
+  * Nginx web server on port 5000
+  * Postgres on port 5432
 
-Ask Fellows to write their name to `fellows` table in the database
+## Goals to pass
 
-## Solution
+* Ping the server node from any of the clients
+* Make a GET request to the server on HTTP from any of the clients
+* Make a GET request to the server on port 5000 from any of the clients
+* Establish a connection to Postgresql in the server on port 5432 from any of the clients
+* All connections should be accessible only from the clients
 
-* Recognize that you cannot reference the Public DNS of a resource in the private subnet
-* Redeploy a new RDS instance in the Private DNS using a snapshot of the previous RDS instance and reference the private DNS instead when using psql
-* telnet from the ec2 machine to the RDS should connect
+## Helpful resources
+
+* [AWS Security Groups](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html)
+* [ICMP/TCP/UDP](http://superuser.com/a/1044369)
