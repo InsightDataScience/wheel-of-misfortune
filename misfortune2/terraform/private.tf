@@ -27,7 +27,7 @@ resource "aws_security_group" "wom2-api" {
 }
 
 resource "aws_instance" "wom2-api" {
-    ami = "${lookup(var.amis, var.aws_region)}"
+    ami = "${lookup(var.amis-api, var.aws_region)}"
     availability_zone = "us-west-2a"
     instance_type = "t2.micro"
     key_name = "${var.aws_key_name}"

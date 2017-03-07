@@ -17,6 +17,13 @@ variable "amis" {
     }
 }
 
+variable "amis-api" {
+    description = "AMIs by region for API"
+    default = {
+        us-west-2 = "ami-6a7ef20a"
+    }
+}
+
 variable "vpc_cidr" {
     description = "CIDR for the whole VPC"
     default = "10.0.0.0/16"
