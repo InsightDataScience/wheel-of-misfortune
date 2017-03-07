@@ -6,9 +6,9 @@ resource "aws_security_group" "wom2-api" {
     description = "Allow incoming API connections."
 
     ingress {
-        from_port = 0
-        to_port = 0
-        protocol = -1
+        from_port = 9999
+        to_port = 9999
+        protocol = "udp"
         security_groups = ["${aws_security_group.wom2-client.id}"]
     }
 
