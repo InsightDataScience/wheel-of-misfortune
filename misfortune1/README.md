@@ -1,4 +1,4 @@
-# Reach a resource with different protocols from multiple clients
+# Reach a resource with different protocols from multiple clients. Modify the AWS infrastructure to pass all the goals.
 
 ## Contents
 
@@ -19,5 +19,6 @@
 * All connections should be accessible only from the clients
 
 ## Helpful resources
-[AWS Security Groups](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html)
-[ICMP/TCP/UDP](http://superuser.com/a/1044369)
+
+* [AWS Security Groups](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html)
+* [ICMP/TCP/UDP](http://superuser.com/a/1044369)
