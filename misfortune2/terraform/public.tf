@@ -1,9 +1,9 @@
 /*
-  Web Servers
+  Client
 */
 resource "aws_security_group" "wom2-client" {
     name = "wom2-client"
-    description = "Client level security groups."
+    description = "Website level security groups."
 
     ingress {
         from_port = 22
@@ -35,7 +35,7 @@ resource "aws_security_group" "wom2-client" {
 
 resource "aws_instance" "wom2-client" {
     ami = "${lookup(var.amis, var.aws_region)}"
-    availability_zone = "us-east-1a"
+    availability_zone = "us-west-2a"
     instance_type = "t2.micro"
     key_name = "${var.aws_key_name}"
     vpc_security_group_ids = ["${aws_security_group.wom2-client.id}"]

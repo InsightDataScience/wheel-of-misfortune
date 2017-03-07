@@ -27,7 +27,7 @@ resource "aws_subnet" "wom2-public" {
     vpc_id = "${aws_vpc.wom2.id}"
 
     cidr_block = "${var.public_subnet_cidr}"
-    availability_zone = "us-east-1a"
+    availability_zone = "us-west-2a"
 
     tags {
         Name = "wom2-public"
@@ -59,7 +59,7 @@ resource "aws_subnet" "wom2-private" {
     vpc_id = "${aws_vpc.wom2.id}"
 
     cidr_block = "${var.private_subnet_cidr}"
-    availability_zone = "us-east-1a"
+    availability_zone = "us-west-2a"
 
     tags {
         Name = "wom2-private"
