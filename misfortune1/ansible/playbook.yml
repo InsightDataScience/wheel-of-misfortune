@@ -1,0 +1,89 @@
+---
+- hosts: tag_Name_wom1_server:&key_wom
+  become: true
+  tasks:
+  - name: Update package list
+    apt: update_cache=yes cache_valid_time=36000
+  - name: Install base packages
+    apt: name={{item}} state=present
+    with_items:
+      - python-pip
+      - python-dev
+      - nginx
+      - postgresql
+  - name: Copy postgres config to remote
+    copy:
+      src: templates/etc/postgresql/9.3/main/postgresql.conf
+      dest: /etc/postgresql/9.3/main/postgresql.conf
+  - name: Restart postgres
+    service:
+      name: postgresql
+      state: restarted
+  - name: Install uwsgi and flask for python
+    pip: name={{item}} state=present
+    with_items:
+      - uwsgi
+      - flask
+  - name: Copy myproject over to web server nodes
+    synchronize:
+      src: src/myproject
+      dest: /home/ubuntu
+  - name: Change ownership of myproject to ubuntu
+    file:
+      dest: /home/ubuntu/myproject
+      owner: ubuntu
+      group: ubuntu
+      recurse: yes
+  - name: Copy wsgi myproject.conf to remote
+    copy:
+      src: templates/etc/init/myproject.conf
+      dest: /etc/init/myproject.conf
+  - name: Copy nginx myproject config template
+    template:
+      src: templates/etc/nginx/sites-available/myproject.j2
+      dest: /etc/nginx/sites-available/myproject
+  - name: Create symbolic link for nginx myproject web application
+    file:
+      src: /etc/nginx/sites-available/myproject
+      dest: /etc/nginx/sites-enabled/myproject
+      state: link
+  - name: Copy myotherproject over to web server nodes
+    synchronize:
+      src: src/myotherproject
+      dest: /home/ubuntu
+  - name: Change ownership of myotherproject to ubuntu
+    file:
+      dest: /home/ubuntu/myotherproject
+      owner: ubuntu
+      group: ubuntu
+      recurse: yes
+  - name: Copy wsgi myotherproject.conf to remote
+    copy:
+      src: templates/etc/init/myotherproject.conf
+      dest: /etc/init/myotherproject.conf
+  - name: Copy nginx myotherproject config template
+    template:
+      src: templates/etc/nginx/sites-available/myotherproject.j2
+      dest: /etc/nginx/sites-available/myotherproject
+  - name: Create symbolic link for nginx myotherproject web application
+    file:
+      src: /etc/nginx/sites-available/myotherproject
+      dest: /etc/nginx/sites-enabled/myotherproject
+      state: link
+  - name: Delete default config for nginx web application
+    file:
+      path: /etc/nginx/sites-available/default
+      state: absent
+  - name: Start wsgi process for myproject
+    service:
+      name: myproject
+      state: restarted
+  - name: Start wsgi process for myotherproject
+    service:
+      name: myotherproject
+      state: restarted
+  - name: Start nginx process
+    service:
+      name: nginx
+      state: restarted
+

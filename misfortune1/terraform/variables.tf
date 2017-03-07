@@ -3,6 +3,10 @@ variable "aws_secret_key" {}
 variable "aws_key_path" {}
 variable "aws_key_name" {}
 
+variable "client_cnt" {
+    default = "4"
+}
+
 variable "aws_region" {
     description = "EC2 Region for the VPC"
     default = "us-west-2"
@@ -17,28 +21,13 @@ variable "amis" {
     }
 }
 
-variable "vpc_cidr_1" {
+variable "vpc_cidr" {
     description = "CIDR for the whole VPC"
     default = "10.0.0.0/16"
 }
 
-variable "vpc_cidr_2" {
-    description = "CIDR for the whole VPC"
-    default = "10.1.0.0/16"
-}
-
-variable "public_subnet_cidr_vpc1_1" {
+variable "public_subnet_cidr_vpc" {
     description = "CIDR for the Public Subnet"
     default = "10.0.0.0/24"
-}
-
-variable "public_subnet_cidr_vpc2_1" {
-    description = "CIDR for the Public Subnet 1"
-    default = "10.1.0.0/24"
-}
-
-variable "public_subnet_cidr_vpc2_2" {
-    description = "CIDR for the Public Subnet 2"
-    default = "10.1.1.0/24"
 }
 
