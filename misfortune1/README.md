@@ -22,3 +22,4 @@
 
 * [AWS Security Groups](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html)
 * [ICMP/TCP/UDP](http://superuser.com/a/1044369)
+* [NGINX](http://nginx.org/en/)
