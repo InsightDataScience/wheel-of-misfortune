@@ -2,20 +2,17 @@
 
 ## Contents
 
-* VPC
-* Public subnet
-* Private subnet
-* EC2 instance in public subnet acting as client
-* EC2 instance in private subnet acting as API server
+* 2 VPCs
+* 2 Public subnet
+* 2 EC2 instances with one in each public subnet acting as client
+* 2 RDS Postgres servers with one in each public subnet
 
 ## Goals to pass
 
-Client should be able to hit the API server with a given user and receive all public repositories
-
-  * GET request against WOM2-API-NODE:9999 to view Prometheus metrics
-  * GET request against WOM2-API-NODE:5000 to view HTML of home page
-  * GET request against WOM2-API-NODE:5000/get-repos?username={myusername}
+Client from either subnet should be able to access their own RDS postgres server along with each others Postgres servers
+  * Ensure each client instance can make a connection with their own database
+  * Ensure each client instance can access each others database
 
 ## Helpful resources
-* [NAT](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html)
-
+* [RDS](https://aws.amazon.com/rds/postgresql/)
+* [VPC Peering](http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/Welcome.html)
