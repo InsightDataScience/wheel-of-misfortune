@@ -42,3 +42,7 @@
 
   * `$ sudo wget https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/ec2.py -P /etc/ansible`
   * `$ sudo chmod +x /etc/ansible/ec2.py`
+  
+8. You can run the Ansible playbooks with the following if there exists a playbook in the current directory
+
+  * `$ ansible-playbook playbook.yaml`
