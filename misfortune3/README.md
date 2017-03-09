@@ -1,4 +1,4 @@
-# Resource in the private subnet access the external internet
+# Allow instances in separate VPCs connect to each others RDS instances
 
 ## Contents
 
@@ -16,3 +16,4 @@ Client from either subnet should be able to access their own RDS postgres server
 ## Helpful resources
 * [RDS](https://aws.amazon.com/rds/postgresql/)
 * [VPC Peering](http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/Welcome.html)
+* [Route Tables](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html)
