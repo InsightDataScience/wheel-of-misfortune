@@ -9,7 +9,7 @@ resource "aws_security_group" "wom2-api" {
         from_port = 22
         to_port = 22
         protocol = "tcp"
-        security_groups = ["0.0.0.0/0"]
+        security_groups = ["${aws_security_group.wom2-client.id}"]
     }
 
     ingress {
