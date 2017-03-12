@@ -1,0 +1,93 @@
+---
+- hosts: tag_Misfortune_wom4:&key_wom
+  become: true
+  vars:
+    home_dir: '/home/ubuntu'
+    hadoop_ver: '2.7.2'
+    spark_ver: '1.6.2'
+    spark_hadoop_ver: '2.6'
+    aws_java_sdk_ver: '1.7.4'
+    hadoop_url: 'http://www.us.apache.org/dist/hadoop/core'
+    spark_url: 'http://www.us.apache.org/dist/spark'
+    aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+    aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+    aws_default_region: "{{ lookup('env', 'AWS_DEFAULT_REGION') }}"
+  tasks:
+  - name: Download Hadoop
+    get_url:
+      url: '{{ hadoop_url }}/hadoop-{{ hadoop_ver }}/hadoop-{{ hadoop_ver }}.tar.gz'
+      dest: '{{ home_dir }}/Downloads/hadoop-{{ hadoop_ver }}.tar.gz'
+  - name: Unpack Hadoop
+    unarchive:
+      remote_src: yes
+      src: '{{ home_dir }}/Downloads/hadoop-{{ hadoop_ver }}.tar.gz'
+      dest: /usr/local
+  - name: Rename Hadoop directory
+    command: 'mv /usr/local/hadoop-{{ hadoop_ver }} /usr/local/hadoop'
+    args:
+      creates: /usr/local/hadoop
+      removes: '/usr/local/hadoop-{{ hadoop_ver }}'
+  - name: Change ownership for Hadoop directory
+    file:
+      path: /usr/local/hadoop
+      owner: ubuntu
+      group: ubuntu
+      recurse: yes
+  - name: Download Spark
+    get_url:
+      url: '{{ spark_url }}/spark-{{ spark_ver }}/spark-{{ spark_ver }}-bin-hadoop{{ spark_hadoop_ver }}.tgz'
+      dest: '{{ home_dir }}/Downloads/spark-{{ spark_ver }}-bin-hadoop{{ spark_hadoop_ver }}.tgz'
+  - name: Unpack Spark
+    unarchive:
+      remote_src: yes
+      src: '{{ home_dir }}/Downloads/spark-{{ spark_ver }}-bin-hadoop{{ spark_hadoop_ver }}.tgz'
+      dest: /usr/local
+  - name: Rename Spark directory
+    command: 'mv /usr/local/spark-{{ spark_ver }}-bin-hadoop{{ spark_hadoop_ver }} /usr/local/spark'
+    args:
+      creates: /usr/local/spark
+      removes: '/usr/local/spark-{{ spark_ver }}-bin-hadoop{{ spark_hadoop_ver }}'
+  - name: Change ownership for Spark directory
+    file:
+      path: /usr/local/spark
+      owner: ubuntu
+      group: ubuntu
+      recurse: yes
+  - name: Copy profile to remote
+    template:
+      src: 'templates/{{ home_dir }}/.profile.j2'
+      dest: '{{ home_dir }}/.profile'
+  - name: Copy aws jars from Hadoop to Spark lib
+    copy: remote_src=true src={{item}} dest='/usr/local/spark/lib'
+    with_items:
+      - '/usr/local/hadoop/share/hadoop/tools/lib/aws-java-sdk-{{ aws_java_sdk_ver }}.jar'
+      - '/usr/local/hadoop/share/hadoop/tools/lib/hadoop-aws-{{ hadoop_ver }}.jar'
+  - name: Get master node private IP
+    ec2_remote_facts:
+      aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+      aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+      region: "{{ lookup('env', 'AWS_DEFAULT_REGION') }}"
+      filters:
+        instance-state-name: running
+        "tag:Name": wom4-master
+    register: ec2_facts
+  - name: Copy spark env template to remote
+    template:
+      src: templates/spark/conf/spark-env.sh.j2
+      dest: /usr/local/spark/conf/spark-env.sh
+  - name: Copy spark conf template to remote
+    template:
+      src: templates/spark/conf/spark-defaults.conf.j2
+      dest: /usr/local/spark/conf/spark-defaults.conf
+  - name: Copy ipython start script to remote
+    template:
+      src: templates/spark/sbin/start-ipython.sh.j2
+      dest: /usr/local/spark/sbin/start-ipython.sh
+      mode: 0755
+  - name: Copy ipython stop script to remote
+    copy:
+      src: templates/spark/sbin/stop-ipython.sh
+      dest: /usr/local/spark/sbin/stop-ipython.sh
+      mode: 0755
+
+

@@ -1,0 +1,7 @@
+---
+- hosts: tag_Name_wom4_master:&key_wom
+  tasks:
+  - name: Stop Master
+    command: '/usr/local/spark/sbin/stop-master.sh'
+  - name: Stop IPython Notebook
+    command: '/usr/local/spark/sbin/stop-ipython.sh'

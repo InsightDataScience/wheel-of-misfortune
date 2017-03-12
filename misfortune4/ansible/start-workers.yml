@@ -1,0 +1,14 @@
+---
+- hosts: tag_Name_wom4_worker:&key_wom
+  tasks:
+  - name: Get master node private IP
+    ec2_remote_facts:
+      aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+      aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+      region: "{{ lookup('env', 'AWS_DEFAULT_REGION') }}"
+      filters:
+        instance-state-name: running
+        "tag:Name": wom4-master
+    register: ec2_facts
+  - name: Start Worker
+    command: '/usr/local/spark/sbin/start-slave.sh spark://{{ ec2_facts.instances[0].private_ip_address }}:7077'

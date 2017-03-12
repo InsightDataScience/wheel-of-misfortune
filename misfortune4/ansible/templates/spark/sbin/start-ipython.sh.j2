@@ -1,0 +1,5 @@
+#!/bin/bash
+
+tmux new-session -s ipython_notebook -n bash -d
+
+tmux send-keys -t ipython_notebook 'PYSPARK_DRIVER_PYTHON=ipython PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --ip="*" --port=8888" /usr/local/spark/bin/pyspark --packages com.databricks:spark-csv_2.10:1.1.0 --master spark://{{ ec2_facts.instances[0].private_ip_address }}:7077 --executor-memory {{ ((ansible_memtotal_mb-1000) * 0.9)|int }}M --driver-memory {{ ((ansible_memtotal_mb-1000) * 0.9)|int }}M --conf spark.hadoop.fs.s3a.impl\=org.apache.hadoop.fs.s3a.S3AFileSystem' C-m
