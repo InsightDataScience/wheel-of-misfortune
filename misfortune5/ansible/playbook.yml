@@ -1,0 +1,16 @@
+---
+- hosts: tag_Name_wom4_api:&key_wom
+  become: true
+  tasks:
+  - name: Copy wsgi kubeflaskprometheus.conf to remote
+    copy:
+      src: templates/etc/init/kubeflaskprometheus.conf
+      dest: /etc/init/kubeflaskprometheus.conf
+  - name: Copy faulty resolv.conf to api machine
+    copy:
+      src: templates/etc/resolv.conf
+      dest: /etc/resolv.conf
+  - name: Restart kube flask prometheus api
+    service:
+      name: kubeflaskprometheus
+      state: restarted
